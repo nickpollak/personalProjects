@@ -1,0 +1,123 @@
+h1{
+    text-align: center;
+}
+
+/* photos page css*/
+body {
+    font-family: 'Times new roman', Arial, sans-serif;
+}
+.gallery-body{
+    background-color: lightblue;
+    text-align: center;
+}
+.gallery {
+    width: 100%;
+    border-spacing: 15px;
+}
+.photo img {
+    width: 100%;
+    max-width: 400px;
+    border-radius: 5px;
+}
+.photo p {
+    margin-top: 10px;
+    font-size: 100%;
+}
+
+
+/* this make the nav bar work*/
+.navbar {
+    font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: #333;
+    padding: 10px 20px;
+}
+.navbar a {
+    color: white;
+    text-decoration: none;
+    padding: 10px 15px;
+    transition: background-color 0.3s;
+}
+.navbar a:hover {
+    background-color: #575757;
+}
+.menu {
+    display: flex;
+    gap: 15px;
+}
+.menu-toggle {
+    display: none;
+    flex-direction: column;
+    gap: 5px;
+    cursor: pointer;
+}
+.menu-toggle div {
+    width: 25px;
+    height: 3px;
+    background-color: white;
+}
+@media (max-width: 768px) {
+    .menu {
+        display: none;
+        flex-direction: column;
+        background-color: #333;
+        position: absolute;
+        top: 120px;
+        right: 20px;
+        width: 200px;
+        border-radius: 5px;
+        overflow: hidden;
+    }
+
+    #menu:checked ~ .menu {
+        display: flex;
+    }
+
+    .menu a {
+        display: block;
+        text-align: center;
+        padding: 10px;
+        background-color: #333;
+    }
+
+    .menu-toggle {
+        display: flex;
+    }
+}
+
+input[type="submit"] {
+    padding: 10px 20px;
+    font-size: 16px;
+    color: white;
+    background-color: green;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    position: relative;
+    transition: background-color 0.3s ease;
+   
+}
+
+/* Hover effect for button */
+input[type="submit"]:hover {
+    background-color: darkgreen;
+    animation: grow-button 10s infinite linear; /* Animation added */
+}
+
+/* Keyframes for growing effect */
+@keyframes grow-button {
+    0% {
+        transform: scale(1);
+    }
+    50% {
+        transform: scale(2.5);
+        background-color: red;
+    }
+    100% {
+        transform: scale(4.0);
+        background-color: blue;
+    }
+}
+

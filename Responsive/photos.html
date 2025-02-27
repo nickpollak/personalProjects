@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Photo Gallery</title>
+    <link rel="stylesheet" type="text/css" href="styles.css">
+</head>
+<body class="gallery-body">
+    <div class = "gallery-container">
+        <h1>Photo Gallery</h1>
+        <nav class="navbar" id="navbar">
+            <div class="brand" id="brand-logo"></div>
+            <label for="menu" class="menu-toggle" id="menu-toggle">
+                <div></div>
+                <div></div>
+                <div></div>
+            </label>
+            <input type="checkbox" id="menu" class="menu-checkbox" style="display: none;">
+            <div class="menu" id="menu-options">
+                <a href="index.html" id="menu-home">Home</a>
+                <a href="AboutMe.html" id="menu-about">About</a>
+                <a href="book.html" id="menu-book">Books</a>
+                <a href="contact.html" id="menu-contact">Contact</a>
+            </div>
+        </nav>
+        <table class="gallery" style="width: 100%; border-spacing: 10px;">
+            <!-- Another 2x2 gallery of photos-->
+            <tr>
+                <td class="photo" id = "camel" style="text-align: center;">
+                    <img src="websitePictures/camel.png" alt="Me on Camel" style= "width: 50%;">
+                    <p>Me on a camel in Morroco!</p>
+                </td>
+                <td class="photo" id = "cat" style="text-align: center;">
+                    <img src="websitePictures/cat_in_brick.png" alt="Cat sleeping" style="width: 70%;">
+                    <p>A cat sleeping the ruins of Ephesus!</p>
+                </td>
+            </tr>
+            <tr>
+                <td class="photo" id = "mosque" style="text-align: center;">
+                    <img src="websitePictures/mosque.png" alt="blue mosque" style="width: 60%;">
+                    <p>Inside of the Blue Mosque in Istanbul!</p>
+                </td>
+                <td class="photo" style="text-align: center;">
+                    <img src="websitePictures/Balloons.png" alt="Hot air balloons" style="width: 70%;">
+                    <p>Hot air balloons in Kapadocia!</p>
+                </td>
+            </tr>
+        </table>
+    </div>
+</body>
+</html>
