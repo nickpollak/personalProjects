@@ -1,0 +1,124 @@
+---
+title: "Feb8"
+author: "Nick Pollak"
+date: "2024-02-08"
+output: html_document
+---
+
+#simulate binomial distribution
+
+dbinom - finds probabilities 
+rbinom - simulates binomial
+
+```{r}
+dbinom(4,10,.3)
+sum(dbinom(5:20,20,1/6))
+```
+simulating binomail distribution (bernouiliis p)
+```{r}
+n <- 20
+p <- 1/6
+
+sum(sample(c(1,0), n, replace = T, prob = c(p, 1-p)))
+```
+
+```{r}
+n <- 20
+p <- 1/6
+sims <- 10000
+ex_bin <- replicate(sims, sum(sample(c(1,0), n, replace = T, prob = c(p, 1-p))))
+
+table(ex_bin)
+
+plot(table(ex_bin)/sims)
+lines(0:n, dbinom(0:n, n, p), type = "b", col = "red", lwd = 2)
+```
+
+dgeom - finds probabilities
+rgeom - generates random values
+```{r}
+p <- 0.3
+success <- FALSE
+failures <- 0
+while(!success){
+  print(failures)
+  success <- sample(c(TRUE, FALSE), 1, prob = c(p,1-p))
+  if(!success){
+    failures <- failures + 1
+  }
+}
+```
+
+
+```{r}
+p <- 0.3
+sims <- 10000
+
+ex_geom <- replicate(sims, {
+  success <- FALSE
+  failures <- 0
+  while(!success){
+    print(failures)
+    success <- sample(c(TRUE, FALSE), 1, prob = c(p,1-p))
+    if(!success){
+     failures <- failures + 1
+    }
+  }
+  failures
+})
+table(ex_geom)
+x<- 0:max(ex_geom)
+plot(table(ex_geom)/sims)
+lines(x, dgeom(x,p), type = "b", col = "red", lwd=2)
+```
+
+
+
+
+Negative Binomial
+dnbinom
+rnbinom
+```{r}
+n<- 20
+p<-0.5
+x <- 0:100
+plot(x,dnbinom(x,n,p),type = "h")
+
+```
+
+
+```{r}
+p<-0.3
+n<-5
+sims <- 10000
+
+ex_neg <- replicate(sims, sum(rgeom(n,p)))
+table(ex_neg)
+
+x <- 0:max(ex_neg)
+plot(table(ex_neg)/sims)
+lines(x,dnbinom(x,n,p), type = "b", col = "red", lwd = 2)
+```
+
+Poisson
+dpois
+rpois
+
+```{r}
+lbd <- 10
+x <- 0:100
+plot(x,dpois(x,lbd), type = "h")
+```
+
+Approximation to the binomial
+```{r}
+n <- 1000
+p<-8/1000
+lbd <- n*p
+x <- 0:floor(3*lbd)
+
+plot(x,dbinom(x,n,p), type = "h")
+lines(x,dpois(x,lbd), type = "b", col = "red", lwd = 2)
+```
+
+

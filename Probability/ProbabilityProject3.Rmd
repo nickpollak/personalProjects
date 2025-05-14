@@ -1,0 +1,120 @@
+---
+title: "ProbabilityProject3"
+author: "Nick Pollak"
+date: "2024-02-26"
+output: html_document
+---
+
+```{r}
+library(fosdata)
+library(remotes)
+library(gcookbook)
+library(tidyverse)
+```
+
+```{r}
+mpg <- as_tibble(mpg)
+#a.)
+bestHwyMpg <-  filter(mpg, mpg$hwy == 44)
+bestHwyMpg
+```
+
+
+```{r}
+#b)
+meanCityComp <- mean(filter(mpg, class == "compact")$cty)
+meanCityComp
+```
+
+
+```{r}
+#c)
+mpg %>%
+  group_by(class) %>%
+  summarize(mean(cty))
+```
+
+
+```{r}
+#d)
+smallDiff <- min(mpg$hwy - mpg$cty)
+filter(mpg, mpg$hwy - mpg$cty == 2)
+```
+
+
+```{r}
+#e)
+mpg %>%
+  group_by(year) %>%
+  summarize("hwyPerYear" = mean(hwy)) %>%
+  arrange(desc(hwyPerYear))
+
+```
+
+
+```{r}
+movies <- as_tibble(movies)
+movies
+```
+
+
+```{r}
+#6.6
+movies %>%
+  group_by(title) %>%
+  summarize("meanRate" = mean(rating), "numRates" = n()) %>%
+  filter(numRates > 30) %>%
+  arrange(desc(meanRate))
+```
+
+
+```{r}
+#6.7
+movies %>%
+  group_by(genres)%>%
+  summarize("numRates" = n()) %>%
+  arrange(desc(numRates))
+```
+
+
+```{r}
+#6.8
+movies %>%
+  filter(genres == "Comedy|Romance") %>%
+  group_by(title) %>%
+  summarize(ratings = n(), avgRating = mean(rating)) %>%
+  filter(ratings >= 50) %>%
+  slice_min(order_by = avgRating)
+
+movies %>%
+  filter(genres == "Comedy|Romance") %>%
+  group_by(title) %>%
+  summarize(ratings = n(), avgRating = mean(rating)) %>%
+  filter(ratings >= 50) %>%
+  slice_max(order_by = avgRating)
+```
+
+
+```{r}
+#6.9
+movies %>%
+  group_by(title) %>%
+  summarize(ratings = n(), avgRating = mean(rating)) %>%
+  filter(avgRating >= 4) %>%
+  slice_max(order_by = ratings)
+```
+
+```{r}
+#6.10
+movies %>%
+  group_by(userId) %>%
+  summarize(mean(rating))
+
+```
+
+
+
+
+
+
+

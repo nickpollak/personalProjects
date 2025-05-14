@@ -1,0 +1,43 @@
+---
+title: "Jan16"
+output: html_document
+date: "2024-01-16"
+---
+
+# shuffle letters for UNITED
+
+```{r}
+united <- c("u","n","i","t","e","d")
+united
+shuffled <- sample(united)
+shuffled
+```
+
+```{r}
+sims <- 10000
+ex1 <- replicate(sims, {
+  shuffled <- sample(united)
+  shuffled[1] == "t" & shuffled[6] == "i"
+})
+mean(ex1)
+```
+
+#Lottery Game 6/49
+
+```{r}
+winning <- sample(1:49, 6)
+choose(6,2)
+```
+
+
+```{r}
+sims <- 10000
+ex2 <- replicate(sims, {
+  ticket <- sample(1:49, 6)
+  sum(ticket %in% winning) == 2
+})
+mean(ex2)
+```
+
+
+

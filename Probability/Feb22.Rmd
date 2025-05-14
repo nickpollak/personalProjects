@@ -1,0 +1,62 @@
+---
+title: "Feb22"
+author: "Nick Pollak"
+date: "2024-02-22"
+output: html_document
+---
+
+```{r}
+mean(sample(1:6, 10000, replace = T))
+```
+
+```{r}
+coin = c("H", "T")
+#sum(sample(coin, 5, replace = T) == "H") == 3
+
+ex1 <- replicate(10000, sum(sample(coin, 5, replace = T) == "H") == 3)
+
+mean(ex1)
+
+10/32
+```
+
+```{r}
+n <- 10000
+x <- runif(n)
+y <- runif(n)
+mean(x^2 + y^2 < 1) * 4
+```
+
+Monte Carlo Methods
+
+```{r}
+mean(runif(10000)^3)
+
+g <- function(x){
+  return(exp(x^4)*sin(x^3))
+}
+xx <- seq(0,1, by = 0.01)
+plot(xx, g(xx), type = "l")
+mean(g(runif(1000000)))
+```
+
+```{r}
+library(tidyverse)
+library(gcookbook)
+```
+
+```{r}
+str(marathon)
+head(marathon)
+ggplot(marathon, aes(Half)) + 
+  geom_density() 
+  geom_histogram(bins = 20, fill = "white", color = "black")
+```
+
+```{r}
+ggplot(marathon, aes(Half, y = ..density..)) + 
+  geom_histogram(bins = 20, fill = "white", color = "black") +
+  geom_density(color = "orange") + 
+labs(title = "Distribution of times for half marathons") +
+  xlab("Time in minutes")
+```

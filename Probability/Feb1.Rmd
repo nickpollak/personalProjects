@@ -1,0 +1,82 @@
+---
+title: "Feb 1"
+author: "Nick Pollak"
+date: "2024-02-01"
+output: html_document
+---
+
+```{r}
+n <- 10
+p <- 0.4
+k <- 4
+
+choose(n,k)*p^k*(1-p)^{n-k}
+dbinom(k,n,p)
+dbinom(c(4,5,6,7), n, p)
+```
+
+```{r}
+n <- 100
+p <- 0.2
+x <- 0:100
+y <- dbinom(x, n, p)
+plot(x,y, type = "h")
+lines(x, dbinom(x,n,0.6), type = "h", col = "red")
+```
+
+
+```{r}
+n <- 100
+x <- 0:n
+
+p1 <- dbinom(x,n,0.2)
+p2 <- dbinom(x,n,0.8)
+
+df <- data.frame(x,p1,p2)
+df
+```
+
+```{r}
+library(tidyverse)
+```
+
+
+```{r}
+df_long <- pivot_longer(df, cols = c("p1","p2"), names_to = "p", values_to = "y")
+df_long
+```
+
+```{r}
+ggplot(df_long, aes(x,y, color = p) )+ geom_point()
+```
+
+```{r}
+n <- 100
+values <- 1:9/10
+x <- rep(0:100,9)
+
+p <- rep(values, each = n + 1)
+
+df <- data_frame(x,p)
+```
+
+```{r}
+df %>%
+  mutate(y = dbinom(x, n, p), p_values = factor(p)) %>%
+  ggplot(aes(x,y, color = p_values)) + geom_point() + geom_line()
+```
+
+
+```{r}
+n<-10
+p<- 0.4
+
+sims <- 10000
+
+z <- rbinom(sims,n,p)
+
+plot(table(z)/sims, type = "h")
+lines(0:n, dbinom(0:n,n,p))
+```
+
+

@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nick Pollak Website</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background-color: rgb(251, 245, 233);
+            font-family: Arial, sans-serif;
+        }
+
+        h1 {
+            text-align: center;
+            margin: 20px 0;
+        }
+
+        .container {
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        table {
+            width: 100%;
+            max-width: 1500px;
+            border-spacing: 10px;
+        }
+
+        td {
+            border: 3px solid black;
+            padding: 10px;
+            text-align: center;
+            vertical-align: top;
+        }
+
+        td img {
+            width: 100%;
+            max-width: 200px;
+            height: auto;
+            border-radius: 5px;
+        }
+
+        td h2 {
+            margin-bottom: 10px;
+        }
+
+        td p {
+            margin-top: 10px;
+            font-size: 16px;
+        }
+
+        @media (max-width: 400px) {
+            table {
+                display: flex;
+                flex-direction: column;
+            }
+
+            tr {
+                display: flex;
+                flex-direction: column;
+                width: 100%;
+            }
+
+            td {
+                margin-bottom: 20px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            td img {
+                max-width: 150px;
+            }
+
+            td p {
+                font-size: 14px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Daily Pollak Times</h1>
+        <table>
+            <tr>
+                <td>
+                    <h2>About Me</h2>
+                    <a href="AboutMe.html">
+                        <img src="websitePictures/calvin_hobbes.png" alt="About Me">
+                    </a>
+                    <p>News of the goings on of Nick Pollak's life.</p>
+                </td>
+                <td>
+                    <h2>Contact</h2>
+                    <a href="contact.html">
+                        <img src="websitePictures/linus.png" alt="Contact">
+                    </a>
+                    <p>Want to get in contact with a prophetic genius?</p>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <h2>Photographs</h2>
+                    <a href="photos.html">
+                        <img src="websitePictures/snoopy.png" alt="Photos">
+                    </a>
+                    <p>Up and coming photographer showcases recent gallery.</p>
+                </td>
+                <td>
+                    <h2>Your Next Read</h2>
+                    <a href="book.html">
+                        <img src="websitePictures/garfield.png" alt="Books">
+                    </a>
+                    <p>Looking for a new book? Look no further.</p>
+                </td>
+            </tr>
+        </table>
+    </div>
+</body>
+</html>

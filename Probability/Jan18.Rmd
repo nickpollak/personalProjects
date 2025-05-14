@@ -1,0 +1,46 @@
+---
+title: "Jan18"
+author: "Nick Pollak"
+date: "2024-01-18"
+output: html_document
+---
+
+```{r}
+library(dplyr)
+```
+
+
+```{r}
+sims <- 10000
+dye1 <- sample(1:6,sims,replace=T)
+dye2 <- sample(1:6,sims,replace=T)
+```
+
+```{r}
+df <- data.frame(dye1, dye2)
+head(df)
+```
+
+```{r}
+dfm <- mutate(df, sum = dye1 + dye2)
+head(dfm)
+```
+
+```{r}
+dff <- filter(dfm, sum == 10)
+head(dff)
+```
+
+```{r}
+mean(dff$dye1 == 6)
+```
+
+```{r}
+df %>%
+  mutate(sum = dye1 +dye2) %>%
+  filter(sum == 10) %>%
+  mutate(cond = dye1 == 6)
+```
+
+
+

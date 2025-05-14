@@ -1,0 +1,32 @@
+---
+title: "Jan25"
+author: "Nick Pollak"
+date: "2024-01-25"
+output: html_document
+---
+#example 1, sum of 3 dice
+```{r}
+sims <- 10000
+example1 <- replicate(sims, sum(sample(1:6, 3, replace = T)))
+```
+
+```{r}
+table(example1)
+plot(table(example1)/sims)
+```
+
+
+
+```{r}
+mean(example1)
+```
+
+#example 2 product of 10 dice
+```{r}
+example2 <- replicate(sims, prod(sample(1:6, 10, replace = T)))
+plot(table(example2))
+mean(example2)
+```
+
+
+

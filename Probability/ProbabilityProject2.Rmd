@@ -1,0 +1,59 @@
+---
+title: "ProbabilityProject2"
+author: "Nick Pollak"
+date: "2024-01-22"
+output:
+  html_document: default
+  pdf_document: default
+---
+
+```{r}
+library(dplyr)
+```
+
+
+#85% of cabs in city are green 15% are blue, witness has 80% correct identification 20% incorrect, 
+```{r}
+sims <- 10000
+car <- sample(c("blue","green"), sims, replace = T, prob = c(.15, .85))
+
+ex1 <- function(x){
+  if(x == "blue"){
+    val = sample(c("blue","green"), 1, prob = c(.2, .8))
+  }else{
+    val = sample(c("blue","green"), 1, prob = c(.2, .8))
+  }
+  return(val)
+}
+
+actual <- sapply(car, ex1)
+df <- data.frame(car, actual) %>% mutate(mean = mean(car == "blue" & actual =="blue"))
+head(df)
+```
+
+
+```{r}
+sims <- 10000
+child1 <- sample(c("boy", "girl"), sims, 1, prob = c(.5, .5))
+child2 <- sample(c("boy", "girl"), sims, 1, prob = c(.5, .5))
+df <- data.frame(child1, child2)
+head(df)
+
+#2
+dff1 <- filter(df, child1 == "boy")
+
+mutate(dff1, problem2 = mean(child2 == "boy")) %>% head()
+
+#3
+dff2 <- filter(df, child1 == "boy" | child2 == "boy")
+
+mutate(dff2, problem3 = mean(child1 == "boy" & child2 == "boy")) %>% head()
+
+#4
+df4 <- df
+df4 %>% rowwise() %>% mutate(walking = sample(c(df4$child1,df4$child2), 1, replace = FALSE)) %>% filter(walking == "boy") %>% mutate(problem4 = mean(df4$child1 == "boy" & df4$child2 == "boy")) %>% head()
+
+
+```
+
+
