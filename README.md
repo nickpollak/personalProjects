@@ -8,3 +8,7 @@ I am a competent programmer and would love to connect!
 - Upload music or link to music and have it analyzed on why is sounds good and what about the chord progression or the sound makes it pleasing to the ear
 - Then have it give a ranking to how well it follows "rules" of music
 - finally have it give recommendations as to key or following notes or improvements to be made
+
+
+## Implementing
+- 8 queens in java as well
