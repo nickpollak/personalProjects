@@ -1,0 +1,711 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Leads Converter</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg: #faf9f7;
+      --surface: #ffffff;
+      --border: #e8e4de;
+      --border-soft: #f0ece6;
+      --accent: #2d6a4f;
+      --accent-light: #e8f4ef;
+      --accent-hover: #245840;
+      --text: #1a1a18;
+      --muted: #8a8478;
+      --muted-light: #b5b0a8;
+      --red: #c0392b;
+      --red-light: #fdf0ef;
+      --tag-bg: #f2efe9;
+    }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'DM Sans', sans-serif;
+      font-weight: 300;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 64px 24px 80px;
+    }
+
+    header {
+      text-align: center;
+      margin-bottom: 52px;
+    }
+
+    header h1 {
+      font-family: 'Instrument Serif', serif;
+      font-weight: 400;
+      font-size: clamp(2.2rem, 5vw, 3.2rem);
+      color: var(--text);
+      letter-spacing: -0.01em;
+      line-height: 1.1;
+    }
+
+    header h1 em {
+      font-style: italic;
+      color: var(--accent);
+    }
+
+    header p {
+      margin-top: 10px;
+      color: var(--muted);
+      font-size: 0.88rem;
+      font-weight: 300;
+      letter-spacing: 0.01em;
+    }
+
+    .card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      width: 100%;
+      max-width: 680px;
+      padding: 36px;
+      margin-bottom: 16px;
+      box-shadow: 0 1px 4px rgba(0,0,0,0.04);
+    }
+
+    .step-label {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 22px;
+    }
+
+    .step-num {
+      width: 22px;
+      height: 22px;
+      border-radius: 50%;
+      background: var(--accent-light);
+      color: var(--accent);
+      font-size: 0.7rem;
+      font-weight: 500;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+
+    .step-title {
+      font-size: 0.8rem;
+      font-weight: 500;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      color: var(--muted);
+    }
+
+    /* Drop zone */
+    .dropzone {
+      border: 1.5px dashed var(--border);
+      border-radius: 10px;
+      padding: 44px 24px;
+      text-align: center;
+      cursor: pointer;
+      transition: border-color 0.2s, background 0.2s;
+      position: relative;
+      background: var(--bg);
+    }
+
+    .dropzone:hover, .dropzone.dragover {
+      border-color: var(--accent);
+      background: var(--accent-light);
+    }
+
+    .dropzone input[type="file"] {
+      position: absolute;
+      inset: 0;
+      opacity: 0;
+      cursor: pointer;
+      width: 100%;
+      height: 100%;
+    }
+
+    .dropzone-icon {
+      font-size: 1.6rem;
+      margin-bottom: 10px;
+      opacity: 0.5;
+    }
+
+    .dropzone-text {
+      font-size: 0.86rem;
+      color: var(--muted);
+      line-height: 1.7;
+    }
+
+    .dropzone-text strong {
+      color: var(--accent);
+      font-weight: 500;
+    }
+
+    .file-selected {
+      margin-top: 14px;
+      font-size: 0.8rem;
+      color: var(--accent);
+      display: none;
+      font-weight: 400;
+    }
+
+    /* Column mapping */
+    #mapping-section { display: none; }
+
+    .mapping-hint {
+      font-size: 0.82rem;
+      color: var(--muted);
+      margin-bottom: 22px;
+      line-height: 1.6;
+    }
+
+    .mapping-grid {
+      display: grid;
+      grid-template-columns: 1fr auto 1fr;
+      gap: 10px 14px;
+      align-items: center;
+    }
+
+    .mapping-label {
+      font-size: 0.8rem;
+      color: var(--text);
+      text-align: right;
+      font-weight: 400;
+    }
+
+    .mapping-label span {
+      color: var(--muted-light);
+      font-size: 0.72rem;
+    }
+
+    .mapping-arrow {
+      color: var(--muted-light);
+      font-size: 0.75rem;
+    }
+
+    .mapping-select {
+      background: var(--bg);
+      border: 1px solid var(--border);
+      color: var(--text);
+      font-family: 'DM Sans', sans-serif;
+      font-size: 0.8rem;
+      font-weight: 300;
+      padding: 7px 10px;
+      border-radius: 7px;
+      width: 100%;
+      cursor: pointer;
+      appearance: none;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6' viewBox='0 0 10 6'%3E%3Cpath d='M1 1l4 4 4-4' stroke='%238a8478' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");
+      background-repeat: no-repeat;
+      background-position: right 10px center;
+      padding-right: 28px;
+      transition: border-color 0.15s;
+    }
+
+    .mapping-select:focus {
+      outline: none;
+      border-color: var(--accent);
+    }
+
+    /* Buttons */
+    .btn {
+      font-family: 'DM Sans', sans-serif;
+      font-weight: 500;
+      font-size: 0.84rem;
+      padding: 10px 24px;
+      border-radius: 8px;
+      border: none;
+      cursor: pointer;
+      transition: all 0.15s;
+      letter-spacing: 0.01em;
+    }
+
+    .btn-primary {
+      background: var(--accent);
+      color: #fff;
+    }
+
+    .btn-primary:hover { background: var(--accent-hover); }
+    .btn-primary:disabled { opacity: 0.4; cursor: not-allowed; }
+
+    .btn-ghost {
+      background: transparent;
+      color: var(--muted);
+      border: 1px solid var(--border);
+    }
+
+    .btn-ghost:hover {
+      border-color: var(--muted-light);
+      color: var(--text);
+      background: var(--tag-bg);
+    }
+
+    .btn-sm {
+      font-size: 0.76rem;
+      padding: 7px 14px;
+    }
+
+    .btn-row {
+      display: flex;
+      gap: 10px;
+      margin-top: 26px;
+      flex-wrap: wrap;
+      align-items: center;
+    }
+
+    /* Status */
+    #status {
+      font-size: 0.8rem;
+      padding: 11px 14px;
+      border-radius: 8px;
+      display: none;
+      margin-top: 18px;
+      font-weight: 400;
+    }
+
+    #status.success { background: var(--accent-light); color: var(--accent); }
+    #status.error { background: var(--red-light); color: var(--red); }
+
+    /* Output */
+    #output-section { display: none; }
+
+    .output-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 16px;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+
+    .count-badge {
+      background: var(--accent-light);
+      color: var(--accent);
+      font-size: 0.72rem;
+      font-weight: 500;
+      padding: 3px 10px;
+      border-radius: 20px;
+    }
+
+    .output-actions {
+      display: flex;
+      gap: 8px;
+    }
+
+    pre {
+      background: var(--bg);
+      border: 1px solid var(--border-soft);
+      border-radius: 8px;
+      padding: 20px;
+      font-size: 0.72rem;
+      line-height: 1.75;
+      overflow-x: auto;
+      max-height: 400px;
+      overflow-y: auto;
+      color: var(--muted);
+      font-family: 'DM Mono', 'Menlo', monospace;
+    }
+
+    .json-key { color: #5b7fa6; }
+    .json-str { color: var(--accent); }
+    .json-null { color: var(--red); }
+    .json-num { color: #b06000; }
+
+    /* Divider */
+    .divider {
+      width: 100%;
+      max-width: 680px;
+      border: none;
+      border-top: 1px solid var(--border-soft);
+      margin: 4px 0 16px;
+    }
+
+    /* Fade in animation */
+    .card {
+      animation: fadeUp 0.3s ease both;
+    }
+
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(8px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    #mapping-section, #output-section {
+      animation: fadeUp 0.25s ease both;
+    }
+
+    /* Scrollbar */
+    pre::-webkit-scrollbar { width: 4px; height: 4px; }
+    pre::-webkit-scrollbar-track { background: transparent; }
+    pre::-webkit-scrollbar-thumb { background: var(--border); border-radius: 2px; }
+  </style>
+</head>
+<body>
+
+<header>
+  <h1>Leads <em>Converter</em></h1>
+  <p>Upload a spreadsheet · map your columns · export leads.txt</p>
+</header>
+
+<!-- Upload card -->
+<div class="card">
+  <div class="step-label">
+    <div class="step-num">1</div>
+    <div class="step-title">Upload File</div>
+  </div>
+  <div class="dropzone" id="dropzone">
+    <input type="file" id="file-input" accept=".csv,.xlsx,.xls" />
+    <div class="dropzone-icon">↑</div>
+    <div class="dropzone-text">
+      Drop your file here or <strong>click to browse</strong><br/>
+      Supports .csv and .xlsx
+    </div>
+    <div class="file-selected" id="file-selected"></div>
+  </div>
+</div>
+
+<!-- Column mapping card -->
+<div class="card" id="mapping-section">
+  <div class="step-label">
+    <div class="step-num">2</div>
+    <div class="step-title">Map Columns</div>
+  </div>
+  <p class="mapping-hint">Match your spreadsheet columns to the required fields. We've auto-detected what we can.</p>
+  <div class="mapping-grid" id="mapping-grid"></div>
+  <div class="btn-row">
+    <button class="btn btn-primary" id="convert-btn">Convert to leads.txt</button>
+    <button class="btn btn-ghost" id="reset-btn">Start over</button>
+  </div>
+  <div id="status"></div>
+</div>
+
+<!-- Output card -->
+<div class="card" id="output-section">
+  <div class="output-header">
+    <div style="display:flex;align-items:center;gap:10px;">
+      <div class="step-label" style="margin:0">
+        <div class="step-num">3</div>
+        <div class="step-title">Output</div>
+      </div>
+      <span class="count-badge" id="count-badge">0 leads</span>
+    </div>
+    <div class="output-actions">
+      <button class="btn btn-ghost btn-sm" id="download-btn">Download leads.txt</button>
+      <button class="btn btn-ghost btn-sm" id="copy-btn">Copy JSON</button>
+    </div>
+  </div>
+  <pre id="json-output"></pre>
+</div>
+
+<!-- Run pipeline card -->
+<div class="card" id="pipeline-section" style="display:none;">
+  <div class="step-label">
+    <div class="step-num">4</div>
+    <div class="step-title">Run Pipeline</div>
+  </div>
+  <p class="mapping-hint">Runs your Python pipeline — fetches data, scores markets, generates emails, and produces <strong>leads_output.csv</strong>. Takes 1–5 minutes.</p>
+  <div class="btn-row" style="margin-top:0">
+    <button class="btn btn-primary" id="run-btn">Run Pipeline</button>
+    <span id="pipeline-status-badge" style="display:none; font-size:0.8rem; color:var(--muted);"></span>
+  </div>
+
+  <!-- Log window -->
+  <div id="log-wrap" style="display:none; margin-top:20px;">
+    <div style="font-size:0.75rem; font-weight:500; letter-spacing:0.06em; text-transform:uppercase; color:var(--muted-light); margin-bottom:8px;">Live output</div>
+    <pre id="log-output" style="max-height:220px; font-size:0.71rem; color:var(--muted);"></pre>
+  </div>
+
+  <!-- Download output -->
+  <div id="download-output-wrap" style="display:none; margin-top:20px; padding:16px; background:var(--accent-light); border-radius:8px; display:none; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:10px;">
+    <span style="font-size:0.84rem; color:var(--accent); font-weight:400;">✓ leads_output.csv is ready</span>
+    <button class="btn btn-primary btn-sm" id="download-output-btn">Download CSV</button>
+  </div>
+</div>
+
+<script>
+  const LEAD_FIELDS = ["name", "email", "Address", "Company", "PropertyAddress", "City", "State", "Country"];
+  const AUTO_MATCH = {
+    name: ["name", "full name", "fullname", "contact name"],
+    email: ["email", "email address", "e-mail"],
+    Address: ["address", "street address", "mailing address", "office address"],
+    Company: ["company", "company name", "organization", "firm"],
+    PropertyAddress: ["propertyaddress", "property address", "property", "prop address"],
+    City: ["city", "city name"],
+    State: ["state", "state code", "st"],
+    Country: ["country", "country code"],
+  };
+
+  let parsedRows = [];
+  let detectedHeaders = [];
+
+  const dropzone = document.getElementById("dropzone");
+  const fileInput = document.getElementById("file-input");
+  const fileSelected = document.getElementById("file-selected");
+  const mappingSection = document.getElementById("mapping-section");
+  const mappingGrid = document.getElementById("mapping-grid");
+  const convertBtn = document.getElementById("convert-btn");
+  const resetBtn = document.getElementById("reset-btn");
+  const status = document.getElementById("status");
+  const outputSection = document.getElementById("output-section");
+  const jsonOutput = document.getElementById("json-output");
+  const countBadge = document.getElementById("count-badge");
+  const downloadBtn = document.getElementById("download-btn");
+  const copyBtn = document.getElementById("copy-btn");
+
+  const pipelineSection = document.getElementById("pipeline-section");
+  const runBtn = document.getElementById("run-btn");
+  const pipelineStatusBadge = document.getElementById("pipeline-status-badge");
+  const logWrap = document.getElementById("log-wrap");
+  const logOutput = document.getElementById("log-output");
+  const downloadOutputWrap = document.getElementById("download-output-wrap");
+  const downloadOutputBtn = document.getElementById("download-output-btn");
+  let pollInterval = null;
+
+  dropzone.addEventListener("dragover", (e) => { e.preventDefault(); dropzone.classList.add("dragover"); });
+  dropzone.addEventListener("dragleave", () => dropzone.classList.remove("dragover"));
+  dropzone.addEventListener("drop", (e) => {
+    e.preventDefault();
+    dropzone.classList.remove("dragover");
+    const file = e.dataTransfer.files[0];
+    if (file) handleFile(file);
+  });
+
+  fileInput.addEventListener("change", () => {
+    if (fileInput.files[0]) handleFile(fileInput.files[0]);
+  });
+
+  function handleFile(file) {
+    fileSelected.style.display = "block";
+    fileSelected.textContent = `📄 ${file.name} · ${(file.size / 1024).toFixed(1)} KB`;
+
+    const ext = file.name.split(".").pop().toLowerCase();
+    const reader = new FileReader();
+
+    if (ext === "csv") {
+      reader.onload = (e) => {
+        const text = e.target.result;
+        const lines = text.trim().split(/\r?\n/);
+        detectedHeaders = parseCSVLine(lines[0]);
+        parsedRows = lines.slice(1).filter(l => l.trim()).map(l => {
+          const vals = parseCSVLine(l);
+          const row = {};
+          detectedHeaders.forEach((h, i) => row[h] = vals[i] || "");
+          return row;
+        });
+        showMapping();
+      };
+      reader.readAsText(file);
+    } else if (ext === "xlsx" || ext === "xls") {
+      uploadDirectly(file);
+    }
+  }
+
+  function uploadDirectly(file) {
+    const formData = new FormData();
+    formData.append("file", file);
+    fetch("/upload", { method: "POST", body: formData })
+      .then(r => r.json())
+      .then(data => {
+        if (data.error) { showStatus(data.error, "error"); return; }
+        showResult(data.leads);
+      })
+      .catch(err => showStatus("Error: " + err.message, "error"));
+  }
+
+  function parseCSVLine(line) {
+    const vals = [];
+    let cur = "", inQ = false;
+    for (let i = 0; i < line.length; i++) {
+      if (line[i] === '"') { inQ = !inQ; }
+      else if (line[i] === "," && !inQ) { vals.push(cur.trim()); cur = ""; }
+      else { cur += line[i]; }
+    }
+    vals.push(cur.trim());
+    return vals;
+  }
+
+  function showMapping() {
+    mappingGrid.innerHTML = "";
+    LEAD_FIELDS.forEach(field => {
+      const label = document.createElement("div");
+      label.className = "mapping-label";
+      label.innerHTML = `${field}`;
+
+      const arrow = document.createElement("div");
+      arrow.className = "mapping-arrow";
+      arrow.textContent = "←";
+
+      const select = document.createElement("select");
+      select.className = "mapping-select";
+      select.dataset.field = field;
+
+      const blankOpt = document.createElement("option");
+      blankOpt.value = "";
+      blankOpt.textContent = "— skip —";
+      select.appendChild(blankOpt);
+
+      detectedHeaders.forEach(h => {
+        const opt = document.createElement("option");
+        opt.value = h;
+        opt.textContent = h;
+        const candidates = AUTO_MATCH[field] || [];
+        if (candidates.some(c => h.toLowerCase().includes(c) || c.includes(h.toLowerCase()))) {
+          opt.selected = true;
+        }
+        select.appendChild(opt);
+      });
+
+      mappingGrid.appendChild(label);
+      mappingGrid.appendChild(arrow);
+      mappingGrid.appendChild(select);
+    });
+
+    mappingSection.style.display = "block";
+    mappingSection.scrollIntoView({ behavior: "smooth" });
+  }
+
+  convertBtn.addEventListener("click", () => {
+    const mapping = {};
+    document.querySelectorAll(".mapping-select").forEach(sel => {
+      if (sel.value) mapping[sel.dataset.field] = sel.value;
+    });
+
+    const leads = parsedRows.map(row => {
+      const lead = {};
+      LEAD_FIELDS.forEach(field => {
+        if (mapping[field]) lead[field] = row[mapping[field]] || "";
+      });
+      return lead;
+    });
+
+    fetch("/save", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(leads)
+    }).catch(() => {});
+
+    showResult(leads);
+  });
+
+  function showResult(leads) {
+    outputSection.style.display = "block";
+    countBadge.textContent = `${leads.length} lead${leads.length !== 1 ? "s" : ""}`;
+    const pretty = JSON.stringify(leads, null, 2);
+    jsonOutput.innerHTML = syntaxHighlight(pretty);
+    showStatus(`✓ ${leads.length} leads converted successfully`, "success");
+    outputSection.scrollIntoView({ behavior: "smooth" });
+    setTimeout(() => {
+      if (pipelineSection) {
+        pipelineSection.style.display = "block";
+        pipelineSection.scrollIntoView({ behavior: "smooth" });
+      }
+    }, 400);
+  }
+
+  function syntaxHighlight(json) {
+    return json
+      .replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;")
+      .replace(/"([^"]+)":/g, '<span class="json-key">"$1"</span>:')
+      .replace(/: "([^"]*)"/g, ': <span class="json-str">"$1"</span>')
+      .replace(/: (null)/g, ': <span class="json-null">$1</span>')
+      .replace(/: (-?\d+\.?\d*)/g, ': <span class="json-num">$1</span>');
+  }
+
+  function showStatus(msg, type) {
+    status.textContent = msg;
+    status.className = type;
+    status.style.display = "block";
+  }
+
+  resetBtn.addEventListener("click", () => {
+    parsedRows = []; detectedHeaders = [];
+    fileInput.value = "";
+    fileSelected.style.display = "none";
+    mappingSection.style.display = "none";
+    outputSection.style.display = "none";
+    status.style.display = "none";
+    fileSelected.textContent = "";
+  });
+
+  downloadBtn.addEventListener("click", () => {
+    window.location.href = "/download";
+  });
+
+  copyBtn.addEventListener("click", () => {
+    navigator.clipboard.writeText(jsonOutput.innerText).then(() => {
+      copyBtn.textContent = "Copied!";
+      setTimeout(() => copyBtn.textContent = "Copy JSON", 1500);
+    });
+  });
+
+  dropzone.addEventListener("dragenter", (e) => { e.preventDefault(); dropzone.classList.add("dragover"); });
+
+  // Pipeline
+  function showPipelineSection() {
+    pipelineSection.style.display = "block";
+    setTimeout(() => pipelineSection.scrollIntoView({ behavior: "smooth" }), 100);
+  }
+
+  runBtn.addEventListener("click", async () => {
+    runBtn.disabled = true;
+    runBtn.textContent = "Running…";
+    pipelineStatusBadge.style.display = "inline";
+    pipelineStatusBadge.textContent = "Pipeline started — this may take a few minutes";
+    logWrap.style.display = "block";
+    downloadOutputWrap.style.display = "none";
+    logOutput.textContent = "";
+
+    try {
+      const res = await fetch("/run", { method: "POST" });
+      const data = await res.json();
+      if (data.error) {
+        pipelineStatusBadge.textContent = "Error: " + data.error;
+        runBtn.disabled = false;
+        runBtn.textContent = "Run Pipeline";
+        return;
+      }
+    } catch (e) {
+      pipelineStatusBadge.textContent = "Failed to start pipeline";
+      runBtn.disabled = false;
+      runBtn.textContent = "Run Pipeline";
+      return;
+    }
+
+    pollInterval = setInterval(async () => {
+      try {
+        const res = await fetch("/status");
+        const data = await res.json();
+        if (data.logs && data.logs.length) {
+          logOutput.textContent = data.logs.join("\n");
+          logOutput.scrollTop = logOutput.scrollHeight;
+        }
+        if (data.outputReady && !data.running) {
+          clearInterval(pollInterval);
+          runBtn.disabled = false;
+          runBtn.textContent = "Run Again";
+          pipelineStatusBadge.textContent = "Done!";
+          downloadOutputWrap.style.display = "flex";
+          downloadOutputWrap.scrollIntoView({ behavior: "smooth" });
+        } else if (!data.running && !data.outputReady) {
+          clearInterval(pollInterval);
+          runBtn.disabled = false;
+          runBtn.textContent = "Run Pipeline";
+          pipelineStatusBadge.textContent = "Pipeline finished but no output CSV found — check logs above";
+        }
+      } catch (e) { /* keep polling */ }
+    }, 3000);
+  });
+
+  downloadOutputBtn.addEventListener("click", () => {
+    window.location.href = "/output";
+  });
+
+</script>
+</body>
+</html>

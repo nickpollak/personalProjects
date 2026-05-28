@@ -1,0 +1,62 @@
+[
+    {
+        "name": "Joe Smith",
+        "email": "joe.smith@greystar.com",
+        "Address": "575 Market St, Suite 400",
+        "Company": "Greystar Real Estate Partners",
+        "PropertyAddress": "340 Fremont St, San Francisco County",
+        "City": "San Francisco",
+        "State": "CA",
+        "Country": "USA"
+    },
+    {
+        "name": "Emily Chen",
+        "email": "echen@related.com",
+        "Address": "30 Hudson Yards",
+        "Company": "Related Companies",
+        "PropertyAddress": "15 Hudson Yards, New York County",
+        "City": "New York City",
+        "State": "NY",
+        "Country": "USA"
+    },
+    {
+        "name": "Daniel Rodriguez",
+        "email": "drodriguez@lincolnapts.com",
+        "Address": "98 San Jacinto Blvd",
+        "Company": "Lincoln Property Company",
+        "PropertyAddress": "700 River St, Travis County",
+        "City": "Austin",
+        "State": "TX",
+        "Country": "USA"
+    },
+    {
+        "name": "Sarah Johnson",
+        "email": "sjohnson@mortenson.com",
+        "Address": "700 Meadow Ln N",
+        "Company": "Mortenson",
+        "PropertyAddress": "365 Nicollet Mall, Hennepin County",
+        "City": "Minneapolis",
+        "State": "MN",
+        "Country": "USA"
+    },
+    {
+        "name": "Michael Lee",
+        "email": "mlee@equityapartments.com",
+        "Address": "515 S Flower St, Suite 3600",
+        "Company": "Equity Residential",
+        "PropertyAddress": "888 S Olive St, Los Angeles County",
+        "City": "Los Angeles",
+        "State": "CA",
+        "Country": "USA"
+    },
+    {
+        "name": "Rachel O'Connor",
+        "email": "roconnor@bozzuto.com",
+        "Address": "131 Dartmouth St",
+        "Company": "Bozzuto",
+        "PropertyAddress": "100 Pier 4 Blvd, Suffolk County",
+        "City": "Boston",
+        "State": "MA",
+        "Country": "USA"
+    }
+]
